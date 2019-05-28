@@ -12,10 +12,11 @@ def hello_world():
 
 @app.route('/filePath/<path>')
 def obtain_files_in_path(path):
-    print(path)
-    print(jsonify(get_map_of_files(path)))
-    print(get_map_of_files(path))
-    js = jsonify(get_map_of_files(path))
+    path_mod = path.replace('+', '/')
+    print(path_mod)
+    print(jsonify(get_map_of_files(path_mod)))
+    print(get_map_of_files(path_mod))
+    js = jsonify(get_map_of_files(path_mod))
     return js
 
 @app.route('/loadTable/<tableName>/<path>/<thefile>')
@@ -23,6 +24,6 @@ def load_table(tableName, path, thefile):
     print(tableName)
     print(path)
     print(thefile)
-    load_sql_table(path + '/' + thefile, tableName)
+    load_sql_table(path.replace('+', '/') + '/' + thefile, tableName)
     print("Complete")
-    return jsonify({success: True})
+    return jsonify({'success': True})

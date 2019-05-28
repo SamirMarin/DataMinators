@@ -4,7 +4,7 @@ import sys
 
 def load_sql_table(path, tableName):
     basepath = os.path.expanduser('~/') + path
-    create_table_str = "CREATE TABLE {}".format(tableName)
+    create_table_str = "CREATE TABLE IF NOT EXISTS {}".format(tableName)
     insert_table_str = "INSERT INTO {}".format(tableName)
     columns = []
     with open(basepath, "r") as f:
@@ -14,7 +14,7 @@ def load_sql_table(path, tableName):
 
     column_names = " (" + ",".join(columns) + ");"
     column_names_insert = " (" + ",".join(columns) + ")"
-    con = sqlite3.connect(":sql_test")
+    con = sqlite3.connect("yelpdb")
     cur = con.cursor()
     print("this is my create statement")
     print(create_table_str + column_names)

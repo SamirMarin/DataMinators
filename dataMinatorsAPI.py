@@ -2,6 +2,7 @@ from flask import Flask, jsonify, Response
 from flask_cors import CORS
 from path_file_seeker import get_map_of_files
 from load_sql_table import load_sql_table
+from loadfile import load_mongo_table
 app = Flask(__name__)
 CORS(app)
 
@@ -23,6 +24,7 @@ def load_table(tableName, path, thefile):
     print(tableName)
     print(path)
     print(thefile)
-    load_sql_table(path + '/' + thefile, tableName)
+    #load_sql_table(path + '/' + thefile, tableName)
+    load_mongo_table(path + '/' + thefile, tableName)
     print("Complete")
     return jsonify({success: True})

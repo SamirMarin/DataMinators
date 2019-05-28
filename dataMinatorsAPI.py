@@ -16,3 +16,10 @@ def obtain_files_in_path(path):
     print(get_map_of_files(path))
     js = jsonify(get_map_of_files(path))
     return js
+
+@app.route('/loadTable/<tableName>/<path>/<thefile>')
+def load_table(tableName, path, thefile):
+    print(tableName)
+    print(path)
+    print(thefile)
+    return jsonify({success: True})

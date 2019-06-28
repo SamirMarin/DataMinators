@@ -34,6 +34,6 @@ def load_table_with_delimiter(tableName, path, thefile, delimiter):
     print(path)
     print(thefile)
     print(delimiter)
-    load_sql_table_with_delimiter(path.replace('+', '/') + '/' + thefile, tableName, delimiter)
+    load_sql_table_with_delimiter(path.replace('+', '/'), thefile, tableName, delimiter)
     print("Complete")
     return jsonify({'success': True})

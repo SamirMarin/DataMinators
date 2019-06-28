@@ -51,8 +51,14 @@ def load_sql_table(path, tableName):
     con.commit()
     con.close()
 
-def load_sql_table_with_delimiter(path, tableName, delimiter):
-    basepath = os.path.expanduser('~/') + path
+def wrap_quotes(col):
+    return "'" + col + "'"
+
+def load_sql_table_with_delimiter(path, file, tableName, delimiter):
+    custFolderPath = os.path.expanduser('~/') + path[0:path.rfind('/')] + "/"
+    basepath = os.path.expanduser('~/') + path + "/" + file
+    print("BASEPATH")
+    print(basepath)
     create_table_str = "CREATE TABLE IF NOT EXISTS {}".format(tableName)
     insert_table_str = "INSERT INTO {}".format(tableName)
     columns = []
@@ -66,9 +72,15 @@ def load_sql_table_with_delimiter(path, tableName, delimiter):
         reader = csv.reader(f, delimiter=current_deli)
         columns = next(reader)
 
+    columns = list(map(wrap_quotes, columns))
+
+    print("Printing Columns")
+    print(columns)
+
     column_names = " (" + ",".join(columns) + ");"
     column_names_insert = " (" + ",".join(columns) + ")"
-    con = sqlite3.connect("yelpdb")
+    print(column_names_insert)
+    con = sqlite3.connect(custFolderPath+"SQLLite.db")
     cur = con.cursor()
     print("this is my create statement")
     print(create_table_str + column_names)
@@ -97,7 +109,7 @@ def load_sql_table_with_delimiter(path, tableName, delimiter):
 
     print("this is one column of data")
 
-    print(to_db[0])
+    #print(to_db[0])
 
     print("this is my insert stm")
     print(insert_table_str + column_names_insert + values)

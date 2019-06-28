@@ -54,9 +54,14 @@ def load_sql_table(path, tableName):
 def wrap_quotes(col):
     return "'" + col + "'"
 
-def load_sql_table_with_delimiter(path, file, tableName, delimiter):
+def append_to_list(the_list, item):
+    list_append = list(the_list)
+    list_append.append(item)
+    return list_append
+
+def load_sql_table_with_delimiter(path, the_file, tableName, delimiter):
     custFolderPath = os.path.expanduser('~/') + path[0:path.rfind('/')] + "/"
-    basepath = os.path.expanduser('~/') + path + "/" + file
+    basepath = os.path.expanduser('~/') + path + "/" + the_file
     print("BASEPATH")
     print(basepath)
     create_table_str = "CREATE TABLE IF NOT EXISTS {}".format(tableName)
@@ -72,6 +77,7 @@ def load_sql_table_with_delimiter(path, file, tableName, delimiter):
         reader = csv.reader(f, delimiter=current_deli)
         columns = next(reader)
 
+    columns.append("file_path")
     columns = list(map(wrap_quotes, columns))
 
     print("Printing Columns")
@@ -80,7 +86,7 @@ def load_sql_table_with_delimiter(path, file, tableName, delimiter):
     column_names = " (" + ",".join(columns) + ");"
     column_names_insert = " (" + ",".join(columns) + ")"
     print(column_names_insert)
-    con = sqlite3.connect(custFolderPath+"SQLLite.db")
+    con = sqlite3.connect(custFolderPath + "SQLLite.db")
     cur = con.cursor()
     print("this is my create statement")
     print(create_table_str + column_names)
@@ -96,7 +102,7 @@ def load_sql_table_with_delimiter(path, file, tableName, delimiter):
 #    for i in dr:
 #        if count == 0:
 #            print(i)
-        to_db = [tuple(i.values()) for i in dr]
+        to_db = [tuple(append_to_list(i.values(), basepath)) for i in dr]
 
     values = " VALUES(?"
     count = 0
